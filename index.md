@@ -1,37 +1,19 @@
-## Welcome to GitHub Pages
+_This page is a preliminary information stump. Please come back soon to find further information regarding the plugin and its use._
 
-You can use the [editor on GitHub](https://github.com/unal-optodigital/DHM/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## Digital Holographic Microscopy - An ImageJ Plugin
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+"DHM" is a plugin developed to work on the well-known software for image processing [ImageJ](https://imagej.nih.gov/ij/index.html) or any of its derivate platforms like [Fiji](https://fiji.sc/) or [Micro-Manager](https://micro-manager.org/). This plugin allows both the realistic simulation and real-time reconstruction of digital holograms.
 
-### Markdown
+### Installation
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+The installation process is the standart procedure for any ImageJ plugin. Just download either the JAR or RAR file and extract its contents under the `imagej/plugins` folder. Its advisable to use the latest release of ImageJ.
 
-```markdown
-Syntax highlighted code block
+### Downloads
 
-# Header 1
-## Header 2
-### Header 3
+[Download the latest JAR](https://drive.google.com/file/d/1ARskoFNgAdFyMoVHhxgctC_6oN80dwRV/view?usp=sharing) or [check the code on GitHub](https://github.com/unal-optodigital/DHM)
 
-- Bulleted
-- List
+### Contact
+- Carlos A. Buitrago-Duque ([cabuitragod@unal.edu.co](mailto:cabuitragod@unal.edu.co))
+- Jorge I. Garcia-Sucerquia ([jigarcia@unal.edu.co](mailto:jigarcia@unal.edu.co))
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/unal-optodigital/DHM/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+![UN](https://unal-optodigital.github.io/DLHM-Microscope/images/un.gif) ![ODP](https://unal-optodigital.github.io/DLHM-Microscope/images/group-logo.gif)
