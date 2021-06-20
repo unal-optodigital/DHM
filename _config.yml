@@ -1,1 +1,4 @@
 theme: jekyll-theme-minimal
+title: DHM in ImageJ
+site_favicon: favicon.ico
+show_downloads: true
