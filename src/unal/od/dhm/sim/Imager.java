@@ -32,6 +32,7 @@ import unal.od.jdiffraction.cpu.utils.ArrayUtils;
 public class Imager {
 
     static float PI = (float) Math.PI;
+    static float SQ2 = (float) Math.sqrt(2);
     private final ImagingFrame parentFrame;
 
     private float[][] inputField;
@@ -337,7 +338,10 @@ public class Imager {
     private void createHologram() {
         // Diffraction limit
         if (isDiffractionLimited) {
-            polarDir = (lambda) / (2 * outputPitch);
+            //double polarDirMax = (lambda) / (2 * outputPitch);
+            //double polarDirMin = (3*moNA) / (2 * SQ2 * PI * magnification);
+            polarDir = (3 * moNA) / magnification;
+            polarDir = Math.asin(polarDir);
             azimuthalDir = PI / 4;
         }
 
