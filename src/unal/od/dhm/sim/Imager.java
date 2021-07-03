@@ -51,6 +51,7 @@ public class Imager {
 
     private double polarDir = 0.01;
     private double azimuthalDir = PI / 4;
+    private double phaseDelay = 0.0;
     private boolean isDiffractionLimited = false;
 
     private boolean isInputReady = false;
@@ -194,6 +195,10 @@ public class Imager {
         }
 
         this.isAnglesReady = true;
+    }
+    
+    public void setPhaseDelay(double phaseDelay) {
+        this.phaseDelay = phaseDelay;
     }
 
     public void createImage() {
@@ -369,6 +374,7 @@ public class Imager {
                 double phaPtY = phaPtX + ky * (j - midPoint) * outputPitch;
                 phaPtY = phaPtY + kz * 100;
                 refPha[i][j] = (float) (kVec * phaPtY);
+                refPha[i][j] = (float) (refPha[i][j] + phaseDelay);
                 refAmp[i][j] = meanValue / 4;
             }
         }

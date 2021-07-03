@@ -27,7 +27,7 @@ import unal.od.dhm.PreferencesKeys;
  */
 public class ImagingSettingsFrame extends javax.swing.JFrame implements PreferencesKeys {
 
-    private static final String TITLE = "Reconstruction settings";
+    private static final String TITLE = "Simulation units";
     private static final String[] UNITS_ABVS = new String[]{"nm", "um", "mm", "cm", "m"};
 
     //units

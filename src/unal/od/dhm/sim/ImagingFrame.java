@@ -55,6 +55,7 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
     private float moNAUser;
     private float azimuthUser;
     private float polarUser;
+    private float phaseShiftUser;
     private float ampMinUser;
     private float ampMaxUser;
     private float phaseMinUser;
@@ -82,6 +83,7 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
     private boolean inputHSet;
     private boolean azimuthSet;
     private boolean polarSet;
+    private boolean phaseShiftSet;
     private boolean ampMinSet;
     private boolean ampMaxSet;
     private boolean phaseMinSet;
@@ -576,6 +578,10 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
                 return false;
             }
         }
+        
+        // Phase Shift addition
+        if(phaseShiftSet)
+            imager.setPhaseDelay(phaseShiftUser);
 
         return true;
     }
@@ -682,6 +688,8 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
                 valid = checkPhaseMinField();
             } else if (input == phaseMaxField) {
                 valid = checkPhaseMaxField();
+            } else if (input == phaseShiftField) {
+                valid = checkPhaseShiftField();
             } else {
                 valid = true;
             }
@@ -994,6 +1002,40 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
             }
         }
         
+        private boolean checkPhaseShiftField() {
+            try {
+                String txt = phaseShiftField.getText();
+
+                if (txt.isEmpty()) {
+                    phaseShiftSet = false;
+                    phaseShiftUser = Float.NaN;
+                    return true;
+                }
+
+                phaseShiftUser = Float.parseFloat(txt);
+
+                if (phaseShiftUser < -2*Math.PI || phaseShiftUser > 2*Math.PI) {
+                    Toolkit.getDefaultToolkit().beep();
+                    phaseShiftField.selectAll();
+
+                    phaseShiftSet = false;
+                    phaseShiftUser = Float.NaN;
+                    return false;
+                }
+
+                phaseShiftSet = true;
+                return true;
+
+            } catch (NumberFormatException e) {
+                Toolkit.getDefaultToolkit().beep();
+                phaseShiftField.selectAll();
+
+                phaseShiftSet = false;
+                phaseShiftUser = Float.NaN;
+                return false;
+            }
+        }
+        
         private boolean checkAmpMinField() {
             try {
                 String txt = ampMinField.getText();
@@ -1142,6 +1184,8 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
         azimuthLabel = new javax.swing.JLabel();
         polarLabel = new javax.swing.JLabel();
         diffLimitChk = new javax.swing.JCheckBox();
+        phaseShiftLabel = new javax.swing.JLabel();
+        phaseShiftField = new javax.swing.JTextField();
         chkPanel = new javax.swing.JPanel();
         phaseChk = new javax.swing.JCheckBox();
         amplitudeChk = new javax.swing.JCheckBox();
@@ -1342,27 +1386,27 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
                 .addGroup(parametersImagingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lambdaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lambdaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(parametersImagingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(roughnessField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(roughnessLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(parametersImagingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(moMagField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(moMagLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(parametersImagingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(moNAField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(moNALabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(parametersImagingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tlFocalField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tlFocalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(parametersImagingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputWLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputWField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(parametersImagingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputHLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputHField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1599,40 +1643,67 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
             }
         });
 
+        phaseShiftLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        phaseShiftLabel.setText("Phase delay [rad]:");
+        phaseShiftLabel.setMaximumSize(new java.awt.Dimension(100, 14));
+        phaseShiftLabel.setMinimumSize(new java.awt.Dimension(100, 14));
+        phaseShiftLabel.setPreferredSize(new java.awt.Dimension(100, 14));
+
+        phaseShiftField.setText("0.0");
+        phaseShiftField.setToolTipText("The phase delay must be a real number in radians between -2*pi and 2*pi.");
+        phaseShiftField.setInputVerifier(verifier);
+        phaseShiftField.setMaximumSize(new java.awt.Dimension(83, 20));
+        phaseShiftField.setMinimumSize(new java.awt.Dimension(83, 20));
+        phaseShiftField.setPreferredSize(new java.awt.Dimension(83, 20));
+        phaseShiftField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                phaseShiftFieldtextFieldFocusGained(evt);
+            }
+        });
+
         javax.swing.GroupLayout parametersInterfPanelLayout = new javax.swing.GroupLayout(parametersInterfPanel);
         parametersInterfPanel.setLayout(parametersInterfPanelLayout);
         parametersInterfPanelLayout.setHorizontalGroup(
             parametersInterfPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(parametersInterfPanelLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(diffLimitChk)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, parametersInterfPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(parametersInterfPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(parametersInterfPanelLayout.createSequentialGroup()
-                        .addContainerGap()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, parametersInterfPanelLayout.createSequentialGroup()
                         .addGroup(parametersInterfPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(polarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(azimuthLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(parametersInterfPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(azimuthField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(polarField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(parametersInterfPanelLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(diffLimitChk)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(polarField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, parametersInterfPanelLayout.createSequentialGroup()
+                        .addComponent(phaseShiftLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(phaseShiftField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         parametersInterfPanelLayout.setVerticalGroup(
             parametersInterfPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, parametersInterfPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(diffLimitChk)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(parametersInterfPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(azimuthLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(azimuthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(parametersInterfPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(polarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(polarField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(parametersInterfPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(phaseShiftLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(phaseShiftField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         chkPanel.setMaximumSize(new java.awt.Dimension(269, 23));
@@ -1762,9 +1833,9 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
             btnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(runBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(runBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(settingsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(settingsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1780,10 +1851,10 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(parametersInputPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 263, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(chkPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 263, Short.MAX_VALUE))
+                        .addGap(30, 30, 30)
+                        .addComponent(chkPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -1798,9 +1869,10 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(parametersImagingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(parametersImagingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(parametersInterfPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(parametersInterfPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
 
@@ -1920,6 +1992,10 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
         verifier.checkAzimuthField();
     }//GEN-LAST:event_diffLimitChkActionPerformed
 
+    private void phaseShiftFieldtextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_phaseShiftFieldtextFieldFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_phaseShiftFieldtextFieldFocusGained
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ampLimitsLabel;
@@ -1960,6 +2036,8 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
     private javax.swing.JLabel phaseLimitsLabel;
     private javax.swing.JTextField phaseMaxField;
     private javax.swing.JTextField phaseMinField;
+    private javax.swing.JTextField phaseShiftField;
+    private javax.swing.JLabel phaseShiftLabel;
     private javax.swing.JTextField polarField;
     private javax.swing.JLabel polarLabel;
     private javax.swing.JCheckBox realChk;
