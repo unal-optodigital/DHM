@@ -157,6 +157,7 @@ public class ReconstructionWindow extends ImageWindow implements ImageListener {
                 ReconstructionWindow.this.liveBtn.setForeground(Color.BLACK);
                 // Set the status parameters
                 ReconstructionWindow.this.live = false;
+                this.fpsField.setText("Static");
             } else {
                 // Start the live display
                 ReconstructionWindow.this.liveReco.startLive();
@@ -166,6 +167,7 @@ public class ReconstructionWindow extends ImageWindow implements ImageListener {
                 ReconstructionWindow.this.liveBtn.setForeground(Color.RED);
                 // Set the status parameters
                 ReconstructionWindow.this.live = true;
+                this.fpsField.setText("Live");
             }
         });
         this.panel.add(this.liveBtn);
