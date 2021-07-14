@@ -454,6 +454,9 @@ public class LiveReconstruction_ implements PlugInFilter, PreferencesKeys {
         this.moMag = magnification;
         this.moNA = NA;
         this.tlFocal = (float) (tubeLens * 1E-6);
+        
+        cali.pixelWidth = cali.pixelWidth / magnification;
+        cali.pixelHeight = cali.pixelHeight / magnification;
     }
     protected void setTuningParameters(float zTune, float fxTune, float fyTune, float linTune) {
         this.refocusZ = (float) (zTune * 1E-6);       
