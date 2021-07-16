@@ -155,9 +155,15 @@ public class LiveReconstruction_ implements PlugInFilter, PreferencesKeys {
         float lambdaUser = pref.getFloat(REC_LAMBDA, Float.NaN);
         float inputWUser = pref.getFloat(REC_INPUT_WIDTH, Float.NaN);
         float inputHUser = pref.getFloat(REC_INPUT_HEIGHT, Float.NaN);
+        moMag = pref.getFloat(REC_MO_MAGNIFICATION, Float.NaN);
         wavelength = (float)(lambdaUser * 1E-6);
         indx = (float)(inputWUser / imgWidth);
         indy = (float)(inputHUser / imgHeight);
+        
+        // Set initial size calibration
+        cali.setUnit("um");
+        cali.pixelWidth = indx * 1E3 / moMag; // User size stored in mm
+        cali.pixelHeight = indy * 1E3 / moMag;
         
         // PluginFilter parameters
         int flags = DOES_ALL + NO_CHANGES;
@@ -256,8 +262,19 @@ public class LiveReconstruction_ implements PlugInFilter, PreferencesKeys {
         if (logScale) { // Logaritmic representation
             ipReco.log();
         }
+        
+        // Calibration data
+        double minVal = ipReco.getMin();
+        double maxVal = ipReco.getMax();
+        double[] coeff = new double[2]; // y = m*x + b
+        coeff[0] = minVal; // b coefficient
+        coeff[1] = (maxVal - minVal)/255; // m coefficient
+        String unit = (recoType == RECO_PHASE) ? "rad" : "adim";
+        
         String recoTitle = titlePrefix + " of " + imageTitle;
         impReco = new ImagePlus(recoTitle, ipReco.convertToByteProcessor());
+        cali.setFunction(Calibration.STRAIGHT_LINE, coeff, unit); // Calibration
+        
         if (recoType == RECO_FFT && !logScale) {
             IJ.run(impReco, "Enhance Contrast...", "saturated=0 equalize");
         }
