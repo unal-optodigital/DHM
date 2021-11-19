@@ -1,5 +1,3 @@
-_This page is a preliminary information stump. Please come back soon to find further information regarding the plugin and its use._
-
 # Digital Holographic Microscopy (DHM)
 ## An ImageJ Plugin
 
@@ -26,7 +24,8 @@ You may choose any of the following:
 
 ### References
 Further information about this plugin and its functional modules can be found in the following publications. These are also the preferred way of citing this tool if you are implementing it in your works.
-- C. Buitrago-Duque and J. Garcia-Sucerquia, "Realistic Simulation and Real-Time Reconstruction of Digital Holographic Microscopy Experiments in ImageJ" ___Submitted to Applied Optics Engineering and Laboratory Notes___.
+- C. Buitrago-Duque and J. Garcia-Sucerquia, "Realistic Simulation and Real-Time Reconstruction of Digital Holographic Microscopy Experiments in ImageJ," Applied Optics, 61(5), B56-B63 (2022).  
+DOI: [10.1364/AO.443137](https://doi.org/10.1364/AO.443137)
 - C. Buitrago-Duque and J. Garcia-Sucerquia, "Realistic modeling of digital holographic microscopy," Optical Engineering 59, 1 (2020).  
 DOI: [10.1117/1.OE.59.10.102418](https://doi.org/10.1117/1.OE.59.10.102418)
 
