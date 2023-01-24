@@ -34,6 +34,9 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
     private int lambdaIdx;
     private int tlFocalIdx;
     private int inputSizeIdx;
+    
+    private boolean isRefValAuto;
+    private float refManVal;
 
     private final Preferences pref;
 
@@ -52,13 +55,20 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
 
         setLocationRelativeTo(parent);
         initComponents();
+                
+        refValField.setText(String.format("%.2g%n", refManVal));
+        autoValCheck.setSelected(isRefValAuto);
+        refValField.setEnabled(!isRefValAuto);
     }
 
     private void loadPrefs() {
-        //units
+        // Units
         lambdaIdx = unitToIdx(pref.get(IMG_LAMBDA_UNITS, "nm"));
         tlFocalIdx = unitToIdx(pref.get(IMG_TL_FOCAL_UNITS, "um"));
         inputSizeIdx = unitToIdx(pref.get(IMG_INPUT_UNITS, "mm"));
+        // Reference
+        isRefValAuto = pref.getBoolean(REF_AUTO_CHECKED, true);
+        refManVal = pref.getFloat(REF_MANUAL_VALUE, 1.0f);
     }
 
     private int unitToIdx(String unit) {
@@ -74,6 +84,19 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
             default:
                 return 4;
         }
+    }
+    
+    private float formatRefVal(String refValString) {
+        try {
+                if (refValString.isEmpty()) {
+                    return 1.0f;
+                } else {
+                    return Float.parseFloat(refValString);
+                }
+            } catch (NumberFormatException e) {
+                Toolkit.getDefaultToolkit().beep();
+                return 1.0f;
+            }
     }
 
     /**
@@ -94,6 +117,10 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
         lambdaLabel = new javax.swing.JLabel();
         tlFocalLabel = new javax.swing.JLabel();
         inputSizeLabel = new javax.swing.JLabel();
+        referencePanel = new javax.swing.JPanel();
+        autoValCheck = new javax.swing.JCheckBox();
+        refValLabel = new javax.swing.JLabel();
+        refValField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(TITLE);
@@ -161,7 +188,7 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
         unitsPanelLayout.setHorizontalGroup(
             unitsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(unitsPanelLayout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(unitsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(unitsPanelLayout.createSequentialGroup()
                         .addComponent(tlFocalLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,7 +219,50 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
                 .addGroup(unitsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputSizeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputSizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        referencePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Reference"));
+
+        autoValCheck.setSelected(true);
+        autoValCheck.setText("Auto set value");
+        autoValCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoValCheckActionPerformed(evt);
+            }
+        });
+
+        refValLabel.setText("Reference value");
+
+        refValField.setText("1");
+        refValField.setEnabled(false);
+
+        javax.swing.GroupLayout referencePanelLayout = new javax.swing.GroupLayout(referencePanel);
+        referencePanel.setLayout(referencePanelLayout);
+        referencePanelLayout.setHorizontalGroup(
+            referencePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(referencePanelLayout.createSequentialGroup()
+                .addGroup(referencePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(referencePanelLayout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(autoValCheck)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(referencePanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(refValLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(refValField)))
                 .addContainerGap())
+        );
+        referencePanelLayout.setVerticalGroup(
+            referencePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(referencePanelLayout.createSequentialGroup()
+                .addComponent(autoValCheck)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(referencePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(refValLabel)
+                    .addComponent(refValField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,15 +270,15 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(unitsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(unitsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(referencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -217,10 +287,12 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
                 .addContainerGap()
                 .addComponent(unitsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(referencePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -230,8 +302,15 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
         pref.put(IMG_LAMBDA_UNITS, UNITS_ABVS[lambdaCombo.getSelectedIndex()]);
         pref.put(IMG_TL_FOCAL_UNITS, UNITS_ABVS[tlFocalCombo.getSelectedIndex()]);
         pref.put(IMG_INPUT_UNITS, UNITS_ABVS[inputSizeCombo.getSelectedIndex()]);
+        
+        refManVal = formatRefVal(refValField.getText());
+        
+        pref.putBoolean(REF_AUTO_CHECKED,autoValCheck.isSelected());
+        pref.putFloat(REF_MANUAL_VALUE, refManVal);
 
         parent.updateUnitsPrefs();
+        parent.updateReferenceSettings(this.autoValCheck.isSelected(), 
+                refValField.getText());
 
         setVisible(false);
         dispose();
@@ -242,13 +321,21 @@ public class ImagingSettingsFrame extends javax.swing.JFrame implements Preferen
         dispose();
     }//GEN-LAST:event_cancelBtnActionPerformed
 
+    private void autoValCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoValCheckActionPerformed
+        this.refValField.setEnabled(!this.autoValCheck.isSelected());
+    }//GEN-LAST:event_autoValCheckActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox autoValCheck;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JComboBox inputSizeCombo;
     private javax.swing.JLabel inputSizeLabel;
     private javax.swing.JComboBox lambdaCombo;
     private javax.swing.JLabel lambdaLabel;
     private javax.swing.JButton okBtn;
+    private javax.swing.JTextField refValField;
+    private javax.swing.JLabel refValLabel;
+    private javax.swing.JPanel referencePanel;
     private javax.swing.JComboBox tlFocalCombo;
     private javax.swing.JLabel tlFocalLabel;
     private javax.swing.JPanel unitsPanel;

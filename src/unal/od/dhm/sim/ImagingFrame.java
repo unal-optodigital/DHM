@@ -355,6 +355,26 @@ public class ImagingFrame extends javax.swing.JFrame implements ImageListener, P
     }
     
     /**
+     * Updates reference value settings
+     * @param isAuto Defines if the reference value es auto-determined
+     * @param txt String with manual value for reference wave amplitude
+     */
+    public void updateReferenceSettings(boolean isAuto, String txt) {
+        float refVal = 1.0f;
+        try {
+                if (txt.isEmpty()) {
+                    isAuto = true;
+                } else {
+                    refVal = Float.parseFloat(txt);
+                }
+            } catch (NumberFormatException e) {
+                Toolkit.getDefaultToolkit().beep();
+                isAuto = true;
+            }
+        imager.setRefAmpValue(isAuto, refVal);
+    }
+    
+    /**
      * Updates the displayed interference angle values after a diffraction-
      * limited run is completed
      * 

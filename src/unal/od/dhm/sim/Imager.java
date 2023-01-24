@@ -66,6 +66,9 @@ public class Imager {
     private double inputPitch;
     private double focalPitch;
     private double outputPitch;
+    
+    private boolean isRefAuto = false;
+    private float refAmpVal = 0.0f;
 
     private FloatFFT_2D fft;
     private Calibration cali;
@@ -74,6 +77,11 @@ public class Imager {
         this.parentFrame = parent;
     }
 
+    public void setRefAmpValue(boolean isRefAuto, float refAmpVal) {
+        this.refAmpVal = refAmpVal;
+        this.isRefAuto = isRefAuto;
+    }
+            
     public void setInputParameters(double width, double height) {
         this.width = width;
         this.height = height;
@@ -370,8 +378,6 @@ public class Imager {
         double midPoint = (refPha.length - 1) / 2.0;
         double kVec = 2 * PI / (lambda);
 
-        // TODO Instead of calculating phase, Re/Im could be directly computed
-        // to latter 
         for (int i = 0; i < M; i++) {
             double phaPtX = kx * (i - midPoint) * outputPitch;
             for (int j = 0; j < N; j++) {
@@ -379,7 +385,12 @@ public class Imager {
                 phaPtY = phaPtY + kz * 100;
                 refPha[i][j] = (float) (kVec * phaPtY);
                 refPha[i][j] = (float) (refPha[i][j] + phaseDelay);
-                refAmp[i][j] = meanValue / 4;
+                
+                if(isRefAuto){
+                    refAmp[i][j] = meanValue / 4;
+                } else {
+                    refAmp[i][j] = refAmpVal * meanValue;
+                }
             }
         }
         float[][] reference = ArrayUtils.complexAmplitude(refPha, refAmp);

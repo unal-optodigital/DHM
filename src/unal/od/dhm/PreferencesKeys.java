@@ -61,6 +61,10 @@ public interface PreferencesKeys {
     final static String IMG_TL_FOCAL_UNITS = "IMG_TL_FOCAL_UNITS";
     final static String IMG_INPUT_UNITS = "IMG_INPUT_UNITS";
     
+    // Reference
+    final static String REF_AUTO_CHECKED = "REF_AUTO_CHECKED";
+    final static String REF_MANUAL_VALUE = "REF_MANUAL_VALUE";
+    
     // RECONSTRUCTION PREFERENCES
     // Imaging parameters
     final static String REC_LAMBDA = "REC_LAMBDA";
