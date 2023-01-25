@@ -358,19 +358,27 @@ public class Imager {
         double ky = Math.sin(polarDir) * Math.sin(azimuthalDir);
         double kz = Math.cos(polarDir);
 
+        // Object amplitude scaling
+        float[][] objAmp = ArrayUtils.modulus(outputField);
+        ArrayUtils.scale2(objAmp, 1.0f);
+        float[][] objPha = ArrayUtils.phase(outputField);
+        outputField = ArrayUtils.complexAmplitude(objPha, objAmp);
+        
         float[][] objReal = ArrayUtils.real(outputField);
         float[][] objImag = ArrayUtils.imaginary(outputField);
-        float[][] objAmp = ArrayUtils.modulus(outputField);
+        
         float meanValue = 0;
-        float dataCount = 0;
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
-                meanValue += objAmp[i][j];
-                dataCount++;
+        if(isRefAuto){
+            float dataCount = 0;
+            for (int i = 0; i < M; i++) {
+                for (int j = 0; j < N; j++) {
+                    meanValue += objAmp[i][j];
+                    dataCount++;
+                }
             }
+            meanValue /= dataCount;
         }
-        meanValue /= dataCount;
-
+        
         // Create reference
         float[][] refAmp = new float[M][N];
         float[][] refPha = new float[M][N];
@@ -387,9 +395,9 @@ public class Imager {
                 refPha[i][j] = (float) (refPha[i][j] + phaseDelay);
                 
                 if(isRefAuto){
-                    refAmp[i][j] = meanValue / 4;
+                    refAmp[i][j] = meanValue;
                 } else {
-                    refAmp[i][j] = refAmpVal * meanValue;
+                    refAmp[i][j] = refAmpVal;
                 }
             }
         }
